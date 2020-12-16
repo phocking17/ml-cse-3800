@@ -21,6 +21,9 @@ class sample:
 		peaks_list = np.ndarray.tolist(peaks[0])
 		return peaks_list
 
+	def __str__(self):
+		return '%s %s %s \n' % (self.name, self.type_f, self.sample_num)
+
 
 ### Load file
 def load_XML(file_name):
@@ -164,10 +167,11 @@ ifile2 = import_files([
 	])
 '''
 ifile3 = import_files(["low_mass_march03\\LowPlasmaQC\\RawXML"])
-
+for i in ifile3:
+	print(i)
 
 #peaks_concentration(categories(ifile), )
-plot_averages(categories(ifile3))
+#plot_averages(categories(ifile3))
 #plot_averages(categories(ifile4))
 #plot_averages(categories(ifile2))
 
