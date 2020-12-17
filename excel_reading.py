@@ -1,5 +1,7 @@
-#This section of the code was written by Aidan Riley
-
+###This script will enable the reading of the clinical data from the excel files
+###This section of the code was written by Aidan Riley
+from load import import_files
+import pandas
 
 #IMPORTANT NOTE
 #line 26 of the march clinical data excel file needs to be corrected so that the two numbers are spaced apart
@@ -17,9 +19,11 @@ def col_name_dict(workbook):
 
 
 #A class that stores the information from the Clinical Data Excel sheet for the March Data
-class patient:
+class Patient:
     def __init__(self,data,type):
         if type == 'march':
+            self.mz = None
+            self.intensity = None
             self.type=type
             self.bank_nums = data[0]
             self.age = data[1]
@@ -35,6 +39,8 @@ class patient:
             self.clinical_response = data[11]
             self.pathologic_response = data[12]
         elif type == 'junepre':
+            self.mz = None
+            self.intensity = None
             self.type = type
             self.bank_nums = data[0],data[1]
             self.age = data[3]
@@ -49,7 +55,9 @@ class patient:
             self.histo = data[13]
             self.clinical_response = data[14]
             self.pathologic_response = data[15]
-        elif type == 'junepre':
+        elif type == 'junepost':
+            self.mz = None
+            self.intensity = None
             self.type = type
             self.bank_nums = data[0], data[1]
             self.age = data[3]
@@ -79,7 +87,7 @@ def parse_file(file,ver):
         if row[0] is None:
             pass
         else:
-            output.append(patient(row,ver))
+            output.append(Patient(row,ver))
     return output
 #this function will call parse_file on the entire folder that the data is stored in
 def parse_folder(folder):
@@ -102,5 +110,43 @@ def parse_folder(folder):
             obj_lst = obj_lst + parse_file(book, ver)
     return obj_lst
 
-y = parse_folder("clinical_data")
 
+#import the june and march low intensity xml files
+
+#enter the path to the xml files here
+june_xml_low = import_files(["low_mass_june03\\LowPrePostJune03\\RawXML"])
+#march_xml_low = import_files(["low_mass_march03\\LowNorPrePost\\RawXML"])
+
+x = june_xml_low
+print(x[0].mz)
+
+#enter the name of your clinical data here
+#excel_lst = parse_folder("clinical_data")
+
+#convert the sample data type into a dictionary for lookup
+def samples_to_dict(sample_lst):
+    dict = {}
+    for sample in sample_lst:
+        dict[int(sample.name[2:])] = sample
+    return dict
+#print(samples_to_dict(june_xml_low))
+
+def link(xmls,excels):
+    lookup = samples_to_dict(xmls)
+    obj_lst = []
+    for patient in excel_lst:
+        #Retrieve the bank number identifier
+        num_one = patient.bank_nums[0]
+        num_two = patient.bank_nums[1]
+        #Access the corresponding xml data
+        mz_dat_one = lookup[num_one]
+        mz_dat_two = lookup[num_two]
+        #Create a new linked object and add to the output list
+        obj_lst.append(Patient_Linked(patient, mz_dat_one.mz, mz_dat_one.intensity))
+    return obj_lst
+
+
+
+#y = link(june_xml_low,excel_lst)
+#for entry in y:
+#    print(entry)
