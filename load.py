@@ -1,5 +1,5 @@
 ### Converts SECTRA MS in XML form to a list of dictionaries
-
+### This section written by Patrick Hocking
 import xmltodict
 import numpy as np
 import matplotlib.pyplot as plt
@@ -150,30 +150,11 @@ def peaks_concentration(categories, conc_width, end_r):
 
 
 
-'''
-ifile = import_files([
-	"low_mass_march03\\LowNorPrePost\\RawXML"
-	])
+
+june_xml_low = import_files(["low_mass_june03\\LowPrePostJune03\\RawXML"])
+march_xml_low = import_files(["low_mass_march03\\LowNorPrePost\\RawXML"])
 
 
-#for i in ifile:
-#	print(i.name, i.type_f)
-
-
-#plot_inputs(ifile)
-
-ifile2 = import_files([
-	"high_mass_march03\\HighNorPrePost\\RawXML"
-	])
-'''
-ifile3 = import_files(["low_mass_march03\\LowPlasmaQC\\RawXML"])
-for i in ifile3:
-	print(i)
-
-#peaks_concentration(categories(ifile), )
-#plot_averages(categories(ifile3))
-#plot_averages(categories(ifile4))
-#plot_averages(categories(ifile2))
 
 
 
