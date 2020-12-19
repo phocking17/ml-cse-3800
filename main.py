@@ -63,7 +63,7 @@ file = 'test_advanced.csv'
 ### List of categorical data for processing
 categorical = ['type','month','treatment','t_size','nodal_status','ER','PR','HER2_IHC','HER2_FISH','histo']
 ### Float data
-floats=['mz','intensity']
+floats=['mz', 'intensity']
 ### Name of success column in data
 success = 'treatment'
 ### Restrict Data to certain variables
@@ -94,8 +94,9 @@ main_file = pd.read_csv("pandas_data.csv")
 ### Remove clinical coding and switch to binary
 main_file=main_file.replace('+','1')
 main_file=main_file.replace('-','0')
+
+### Converts arrays imported as lists to list-types
 main_file=testing_formatting.transform_to_float(main_file, floats)
-print(main_file[floats[0]])
 
 ### Select Module to treat the mz and intensity data
 ### array_module.module(file, [Paramater List]) -> See documentation for details
@@ -147,6 +148,7 @@ def get_parent_dir(directory):
 
 os.chdir('out')
 
+### For every model tested, outputs the predicted score vs the real score (as lists)
 for i in model_output:
 	c = 0
 	t = 0
@@ -155,6 +157,9 @@ for i in model_output:
 			c+=1
 		t+=1
 	print(c/t)
+
+
+### VISUALIZATIONS HERE
 
 
 
