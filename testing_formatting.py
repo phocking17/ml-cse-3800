@@ -15,7 +15,11 @@ def transform_to_classes(data, parameter_list):
 
 def transform_to_float(data, parameter_list):
 	for parameter in parameter_list:
-		print(data[parameter])
+		c=0
+		for x in data[parameter].iteritems():
+			c+=1
+			print(c)
+			t=[i for i in x[1][1:-1].split(', ')]
 		data[parameter]=data[parameter].apply(lambda x: [i for i in x[1:-1].split(', ')])
 	for parameter in parameter_list:
 		data[parameter] = pd.to_numeric(data[parameter])

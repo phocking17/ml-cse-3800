@@ -19,6 +19,7 @@ import testing_formatting
 import array_module
 from machine_learning_template import *
 import Generate_Report
+import create_pandas
 
 ##################################################################################################################
 ### Create Learning Objects Here
@@ -95,6 +96,7 @@ main_file = pd.read_csv("pandas_data.csv")
 main_file=main_file.replace('+','1')
 main_file=main_file.replace('-','0')
 
+print(main_file['mz'].iloc[10][1])
 ### Converts arrays imported as lists to list-types
 main_file=testing_formatting.transform_to_float(main_file, floats)
 
