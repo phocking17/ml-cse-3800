@@ -1,9 +1,11 @@
 ### Transforms dataframes into testing dataframes
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
 
 def transform_to_classes(data, parameter_list):
 	for parameter in parameter_list:
+		data[parameter] = data[parameter].astype("|S" )
 		le = LabelEncoder()
 		data[parameter] = le.fit_transform(data[parameter])
 	return data

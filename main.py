@@ -15,10 +15,8 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 
 ### Imports Helper Functions
-import preprocessing
-import prepare_for_testing
+import testing_formatting
 from machine_learning_template import *
-import Generate_Report
 
 ##################################################################################################################
 ### Create Learning Objects Here
@@ -61,9 +59,9 @@ Learn_Object_List.append(mlpc)
 ### Data to test file
 file = 'test_advanced.csv'
 ### List of categorical data for processing
-categorical = []
+categorical = ['type','month','treatment','t_size','nodal_status','ER','PR','HER2_IHC','HER2_FISH','histo']
 ### Name of success column in data
-success = 'type'
+success = 'treatment'
 ### Restrict Data to certain variables
 restriction = ['undergrad', 'lawschool']
 ##################################################################################################################
@@ -87,24 +85,33 @@ restriction = ['undergrad', 'lawschool']
 ##################################################################################################################
 ##################################################################################################################
 
+### import main data file
+main_file = pd.read_csv("pandas_data.csv")
+main_file=main_file.replace('+','1')
+main_file=main_file.replace('-','0')
+print(main_file.iloc[0])
+dataframe=main_file
+
 ### We run combination to objects, feature adjustments, and conversion to pandas here
 
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
 
-### Data splitting and further processing
+encoding = testing_formatting.transform_to_classes(dataframe,categorical)
+testing_objects_list=testing_formatting.prepare_for_testing(encoding, success,['bank_nums','mz','intensity'])
 
 ##################################################################################################################
-
+testing_list=[]
+model_output=[]
 ### Training, creation of learner output objects
 limit_mls = []
 for model in Learn_Object_List:
 	limit_mls.append(copy.deepcopy(model))
-limit_list_standard_s = []
+model_results = []
 for ml_model in limit_mls:
-	limit_list_standard_s.append(learner(limit_test_standard[2], limit_test_standard[0], limit_test_normalized[1], ml_model))
-testing_list.append(limit_list_standard_s)
+	model_output.append(learner(testing_objects_list[2], testing_objects_list[0], testing_objects_list[1], ml_model))
+testing_list.append(model_output)
 
 ##################################################################################################################
 ##################################################################################################################
@@ -137,8 +144,7 @@ testing_list.append(limit_list_standard_s)
 
 Compare_scoring_matrix = []
 count = 0
-y_test_normal = test_normalized[3]
-y_test_n_s = test_normalized[4]
+true_score=testing_objects_list[3]
 
 ### Move to Out Folder
 def get_parent_dir(directory):
@@ -146,7 +152,7 @@ def get_parent_dir(directory):
 
 main = get_parent_dir(os.getcwd())
 os.chdir(main)
-os.chdir('Out')
+os.chdir('out')
 
 for lisp in testing_list:
 	for model in lisp:
