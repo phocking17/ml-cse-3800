@@ -7,7 +7,7 @@ from load import import_files
 from openpyxl import load_workbook
 import os
 import copy
-
+import pickle
 #functions for pairing row names with indicies
 def col_name_dict(workbook):
     for row in workbook.iter_rows(min_row=1,max_row=1,values_only=True):
@@ -44,8 +44,8 @@ class Patient:
             self.HER2_IHC = data[8]
             self.HER2_FISH = data[9]
             self.histo = data[10]
-            self.clinical_response = data[11]
-            self.pathologic_response = data[12]
+            #self.clinical_response = data[11]
+            #self.pathologic_response = data[12]
         elif month == 'junepre':
             self.mz = None
             self.intensity = None
@@ -62,8 +62,8 @@ class Patient:
             self.HER2_IHC = data[11]
             self.HER2_FISH = data[12]
             self.histo = data[13]
-            self.clinical_response = data[14]
-            self.pathologic_response = data[15]
+            #self.clinical_response = data[14]
+            #self.pathologic_response = data[15]
         elif month == 'junepost':
             self.mz = None
             self.intensity = None
@@ -86,6 +86,9 @@ class Patient:
 
     def __str__(self):
         return '%s %s %s \n' % (self.month, self.bank_nums, self.type)
+
+    def show(self):
+        print(vars(self))
 
 
 
@@ -189,5 +192,4 @@ def undo_dictionary(dict):
         out.append(dict[key])
     return out
 y = undo_dictionary(y)
-
-
+pickle.dump(y, open("save.txt", "wb"))
