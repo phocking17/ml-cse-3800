@@ -16,6 +16,7 @@ from sklearn.neural_network import MLPClassifier
 
 ### Imports Helper Functions
 import testing_formatting
+import array_module
 from machine_learning_template import *
 import Generate_Report
 
@@ -61,6 +62,8 @@ Learn_Object_List.append(mlpc)
 file = 'test_advanced.csv'
 ### List of categorical data for processing
 categorical = ['type','month','treatment','t_size','nodal_status','ER','PR','HER2_IHC','HER2_FISH','histo']
+### Float data
+floats=['mz','intensity']
 ### Name of success column in data
 success = 'treatment'
 ### Restrict Data to certain variables
@@ -88,17 +91,25 @@ restriction = ['undergrad', 'lawschool']
 
 ### import main data file
 main_file = pd.read_csv("pandas_data.csv")
+### Remove clinical coding and switch to binary
 main_file=main_file.replace('+','1')
 main_file=main_file.replace('-','0')
-dataframe=main_file
+main_file=testing_formatting.transform_to_float(main_file, floats)
+print(main_file[floats[0]])
 
-### We run combination to objects, feature adjustments, and conversion to pandas here
-
+### Select Module to treat the mz and intensity data
+### array_module.module(file, [Paramater List]) -> See documentation for details
+### Peaks -> Collects X number of peaks
+dataframe=array_module.peaks(main_file, ['mz'])
+print(dataframe)
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
 
+### Creates compatible labels for categorical data (strings)
 encoding = testing_formatting.transform_to_classes(dataframe,categorical)
+
+### Breaks into list
 testing_objects_list=testing_formatting.prepare_for_testing(encoding, success,['bank_nums','mz','intensity'])
 
 ##################################################################################################################
@@ -137,9 +148,13 @@ def get_parent_dir(directory):
 os.chdir('out')
 
 for i in model_output:
-	print(i.prediction.tolist())
-	print(true_score.tolist())
-	print("")
+	c = 0
+	t = 0
+	for j,k in zip(i.prediction.tolist(),true_score.tolist()):
+		if j==k:
+			c+=1
+		t+=1
+	print(c/t)
 
 
 
